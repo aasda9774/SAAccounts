@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Store</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #22d3ee;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+.nav {
+    background-color: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 1.25rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.brand {
+    color: var(--accent);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.brand span {
+    background: linear-gradient(to right, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: var(--accent);
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 7rem auto 2rem;
+    padding: 0 1.5rem;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+.product-card {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-details {
+    padding: 1.5rem;
+}
+
+.product-category {
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.product-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.product-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.product-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.buy-button {
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.buy-button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Payment Modal Styles */
+.payment-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-button {
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: white;
+}
+
+.binance-button {
+    background: linear-gradient(45deg, #F0B90B, #F8D12F);
+}
+
+.vodafone-button {
+    background: linear-gradient(45deg, #e60000, #ff0000);
+}
+
+.payment-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.close-modal:hover {
+    color: var(--text-primary);
+}
+
+/* Feedback Section Styles */
+.feedback-section {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.feedback-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(to right, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feedback-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.feedback-card {
+    background-color: var(--bg-color);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.feedback-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feedback-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.feedback-info {
+    flex-grow: 1;
+}
+
+.feedback-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.feedback-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.feedback-stars {
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+}
+
+.feedback-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.add-feedback-form {
+    background-color: var(--bg-color);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.form-input, .form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submit-feedback {
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-feedback:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .feedback-grid {
+        grid-template-columns: 1fr;
+    }
+       .features-section {
+          background-color: var(--card-bg);
+          border-radius: 16px;
+          padding: 2.5rem;
+          margin-bottom: 4rem;
+          border: 1px solid rgba(148, 163, 184, 0.1);
+      }
+
+      .features-title {
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 2rem;
+          background: linear-gradient(to right, var(--accent), var(--primary));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+      }
+
+      .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 2rem;
+      }
+
+      .feature-card {
+          background-color: var(--bg-color);
+          padding: 1.5rem;
+          border-radius: 12px;
+          border: 1px solid rgba(148, 163, 184, 0.1);
+          transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+          transform: translateY(-5px);
+          border-color: var(--accent);
+      }
+
+      .feature-icon {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+          color: var(--accent);
+      }
+
+      .feature-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          color: var(--text-primary);
+      }
+
+      .feature-description {
+          color: var(--text-secondary);
+          line-height: 1.6;
+          font-size: 0.9rem;
+      }
+
+      /* Add to your existing responsive styles */
+      @media (max-width: 768px) {
+          .features-grid {
+              grid-template-columns: 1fr;
+          }
+      }
+    </style>
+</head>
+<body>
+    <!-- Previous nav section -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="brand">
+                <span>SA Accounts Store</span>
+            </a>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Products</a>
+                <a href="https://www.facebook.com/ahmed.140211/" class="nav-link">trusted seller</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Previous main container -->
+    <div class="main-container">
+        <div class="hero-section">
+            <h1 class="hero-title">Premium Gaming Products</h1>
+            <p class="hero-subtitle">Discover our collection of high-quality gaming accounts, VPN services, and accessories</p>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="product1.jpg" alt="Sudden Attack Account" class="product-image">
+                <div class="product-details">
+                    <div class="product-category">Account</div>
+                    <h3 class="product-name">Sudden Attack Korean Account</h3>
+                    <p class="product-description">Brand new account with all features unlocked. Ready to play immediately.</p>
+                    <div class="product-footer">
+                        <div class="product-price">$10.00</div>
+                        <button class="buy-button" onclick="openPaymentModal()">Purchase</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="product2.jpg" alt="VPN Service" class="product-image">
+                <div class="product-details">
+                    <div class="product-category">VPN Service</div>
+                    <h3 class="product-name">Mudfish VPN</h3>
+                    <p class="product-description">Low-latency gaming VPN optimized for the best gaming experience.</p>
+                    <div class="product-footer">
+                        <div class="product-price">$5.00</div>
+                        <button class="buy-button" onclick="openPaymentModal()">Purchase</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Feedback Section -->
+        <div class="feedback-section">
+            <h2 class="feedback-title">Customer Feedback</h2>
+            <div class="feedback-grid">
+                <!-- Example feedback cards -->
+                <div class="feedback-card">
+                    <div class="feedback-header">
+                        <div class="feedback-avatar">M</div>
+                        <div class="feedback-info">
+                            <div class="feedback-name">Mohamed Ahmed</div>
+                            <div class="feedback-date">2024-12-20</div>
+                        </div>
+                    </div>
+                    <div class="feedback-stars">★★★★</div>
+                    <p class="feedback-text">Very excellent Thanks for you.</p>
+                </div>
+                <div class="feedback-card">
+                    <div class="feedback-header">
+                        <div class="feedback-avatar">A</div>
+                        <div class="feedback-info">
+                            <div class="feedback-name">Ahmed Hassan</div>
+                            <div class="feedback-date">2024-12-19</div>
+                        </div>
+                    </div>
+                    <div class="feedback-stars">★★★★★</div>
+                    <p class="feedback-text">Respected and trusted seller. The service is excellent and the prices are reasonable.</p>
+                </div>
+            </div>
+   <!-- New Features Section -->
+        <div class="features-section">
+            <h2 class="features-title">Why Choose Us?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">Complete Package</h3>
+                    <p class="feature-description">Get Sudden Attack + VPN fly vpn account for only $15 - the best value package for gamers!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Account Protection</h3>
+                    <p class="feature-description">One-week account guarantee against bans due to identity confirmation. Your gaming experience is secured!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Free Replacement</h3>
+                    <p class="feature-description">If your account gets closed due to identity confirmation, receive a free replacement account immediately!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title">Premium Service</h3>
+                    <p class="feature-description">Trusted seller with excellent customer support and fast delivery of all SA products. .</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rest of your content (products grid, feedback section, etc.) remains unchanged -->
+        <div class="products-grid">
+            <!-- Your existing product cards -->
+        </div>
+
+        <div class="feedback-section">
+            <!-- Your existing feedback content -->
+        </div>
+    </div>
+            <!-- Add Feedback Form -->
+         
+
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closePaymentModal()">&times;</button>
+            <h2 class="modal-title">Choose Payment Method</h2>
+            <div class="payment-options">
+                <button class="payment-button binance-button" onclick="goToFacebook()">
+                    Pay with Binance (International)
+                </button>
+                <button class="payment-button vodafone-button" onclick="goToFacebook()">
+                    Pay with Vodafone Cash (Egypt)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Previous JavaScript functions
+        function openPaymentModal() {
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function goToFacebook() {
+            window.location.href = 'https://www.facebook.com/A7m3dAyman9774';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('paymentModal')) {
+                closePaymentModal();
+            }
+        }
+
+        // Add feedback submission function
+        function submitFeedback(event) {
+            event.preventDefault();
+            const form = event.target;
+            const name = form.querySelector('input[type="text"]').value;
+            const rating = form.querySelector('select').value;
+            const feedback = form.querySelector('textarea').value;
+
+            // Create new feedback card
+            const feedbackGrid = document.querySelector('.feedback-grid');
+            const newFeedback = document.createElement('div');
+            newFeedback.className = 'feedback-card';
+            newFeedback.innerHTML = `
+                <div class="feedback-header">
+                    <div class="feedback-avatar">${name[0]}</div>
+                    <div class="feedback-info">
+                        <div class="feedback-name">${name}</div>
+                        <div class="feedback-date">${new Date().toISOString().split('T')[0]}</div>
+                    </div>
+                </div>
+                <div class="feedback-stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>
+                <p class="feedback-text">${feedback}</p>
+            `;
+
+            feedbackGrid.insertBefore(newFeedback, feedbackGrid.firstChild);
+            form.reset();
+            alert('شكراً لتقييمك!');
+        }
+    </script>
+</body>
+</html>
